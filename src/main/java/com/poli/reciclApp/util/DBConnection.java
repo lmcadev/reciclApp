@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/residuos_db";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String URL = "jdbc:mysql://145.223.79.134/reciclApp";
+    private static final String USER = "reciclApp";
+    private static final String PASSWORD = "zaVRUkqbd8LYi9cN9txV";
 
     public static Connection getConnection() throws SQLException {
         try {

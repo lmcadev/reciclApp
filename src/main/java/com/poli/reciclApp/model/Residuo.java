@@ -53,4 +53,9 @@ public class Residuo {
     public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
+
+    public void actualizarPeso(float nuevoPeso) {
+        this.peso = nuevoPeso;
+    }
+    
 }

@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -30,10 +31,11 @@ public class EmpresaController {
 
     @GetMapping("/registrarPeso")
     public String registrarPesoVista(HttpSession session, Model model) {
+        
         Usuario empresa = (Usuario) session.getAttribute("usuario");
-        List<Recoleccion> pendientes = new RecoleccionDAO().listarPorEmpresa(empresa.getId());
-        model.addAttribute("pendientes", pendientes);
-        return "empresa/registrarPeso";
+        List<Recoleccion> recolecciones = new RecoleccionDAO().listarPorEmpresa(empresa.getId());
+        model.addAttribute("recolecciones", recolecciones);
+        return "empresa/registrarPeso"; // Vista para registrar peso
     }
 
     @PostMapping("/confirmarRecoleccion")
@@ -43,10 +45,18 @@ public class EmpresaController {
     }
 
     @PostMapping("/registrarPeso")
-    public String registrarPeso(
-            @RequestParam("idRecoleccion") String id,
-            @RequestParam("peso") float peso) {
-        new ResiduoDAO().actualizarPesoPorRecoleccion(id, peso);
-        return "redirect:/empresa/registrarPeso";
+    public String registrarPeso(@RequestParam("idRecoleccion") String recoId,
+            @RequestParam("peso") float peso,
+            RedirectAttributes redirectAttributes) {
+        boolean exito = new RecoleccionDAO().registrarPeso(recoId, peso);
+
+        if (exito) {
+            redirectAttributes.addFlashAttribute("mensajeExito", "Peso registrado exitosamente.");
+        } else {
+            redirectAttributes.addFlashAttribute("mensajeError", "Error al registrar el peso.");
+        }
+
+        return "redirect:/empresa/pendientes"; // Ajusta la URL al JSP donde estás mostrando la tabla
     }
+
 }

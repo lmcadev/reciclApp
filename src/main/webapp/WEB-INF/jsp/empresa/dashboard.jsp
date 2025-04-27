@@ -25,10 +25,10 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="list-group">
-                <a href="${pageContext.request.contextPath}/empresa?action=asignadas" class="list-group-item list-group-item-action">
+                <a href="${pageContext.request.contextPath}/empresa/asignadas" class="list-group-item list-group-item-action">
                     Recolecciones Asignadas
                 </a>
-                <a href="${pageContext.request.contextPath}/empresa?action=registrarPeso" class="list-group-item list-group-item-action">
+                <a href="${pageContext.request.contextPath}/empresa/registrarPeso" class="list-group-item list-group-item-action">
                     Registrar Pesos de Residuos
                 </a>
             </div>

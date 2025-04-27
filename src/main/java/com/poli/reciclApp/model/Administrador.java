@@ -1,4 +1,11 @@
 package com.poli.reciclApp.model;
+import java.util.List;
+
+import org.springframework.ui.Model;
+
+import com.poli.reciclApp.dao.LocalidadDAO;
+import com.poli.reciclApp.dao.RecoleccionDAO;
+import com.poli.reciclApp.dao.UsuarioDAO;
 import com.poli.reciclApp.model.enums.Rol;
 
 
@@ -7,15 +14,28 @@ public class Administrador extends Usuario {
         super(id, nombre, correo, contrasena, telefono, direccion, localidad, Rol.ADMINISTRADOR);
     }
 
-    public void asignarEmpresaARecoleccion() {
-        // Simulación de asignación
+    public String asignarEmpresaARecoleccion(Model model) {
+        List<Recoleccion> pendientes = new RecoleccionDAO().listarSinEmpresa();
+        List<Usuario> empresas = new UsuarioDAO().listarPorRol(Rol.EMPRESA_RECOLECTORA);
+        List<Localidad> localidades = new LocalidadDAO().listarTodas();
+        model.addAttribute("pendientes", pendientes);
+        model.addAttribute("empresas", empresas);
+        model.addAttribute("localidades", localidades);
+        
+        return "admin/asignarRecoleccion";
     }
 
-    public void asignarRol(Usuario usuario, Rol nuevoRol) {
-        // Asignación de rol (se modificaría en BD)
+    public String asignarRol(Model model) {
+        List<Usuario> usuarios = new UsuarioDAO().listarTodos();
+        model.addAttribute("usuarios", usuarios);
+        List<Localidad> localidades = new LocalidadDAO().listarTodas();
+        model.addAttribute("localidades", localidades);
+        return "admin/asignarRol";
     }
 
-    public void generarReporte() {
-        // Lógica para generar reporte global
+    public String generarReporte(Model model) {
+        List<Recoleccion> reportes = new RecoleccionDAO().obtenerTodas();
+        model.addAttribute("reportes", reportes);
+        return "admin/reporte";
     }
 }

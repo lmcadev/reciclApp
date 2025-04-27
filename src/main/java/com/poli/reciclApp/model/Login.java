@@ -12,30 +12,19 @@ public class Login {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         Usuario encontrado = usuarioDAO.buscarPorCorreo(correo);
 
-
         System.out.println("Buscando correo: " + correo);
 
-
-
-if (encontrado != null) {
-    System.out.println("Encontrado: " + encontrado.getCorreo());
-}
+        if (encontrado != null) {
+            System.out.println("Encontrado: " + encontrado.getCorreo());
+        }
 
         if (encontrado != null && encontrado.getContrasena().equals(contrasena)) {
             this.usuario = encontrado;
             this.estado = EstadoSesion.ACTIVA;
-            this.token = "fake-jwt-token"; 
+            this.token = "fake-jwt-token";
             return true;
         }
         return false;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public EstadoSesion getEstado() {
-        return estado;
     }
 
     public void cerrarSesion() {
@@ -45,4 +34,9 @@ if (encontrado != null) {
     public boolean esValida() {
         return this.estado == EstadoSesion.ACTIVA;
     }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+  
 }

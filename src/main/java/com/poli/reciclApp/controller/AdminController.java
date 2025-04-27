@@ -3,6 +3,7 @@ package com.poli.reciclApp.controller;
 import com.poli.reciclApp.dao.LocalidadDAO;
 import com.poli.reciclApp.dao.RecoleccionDAO;
 import com.poli.reciclApp.dao.UsuarioDAO;
+import com.poli.reciclApp.model.Administrador;
 import com.poli.reciclApp.model.Localidad;
 import com.poli.reciclApp.model.Recoleccion;
 import com.poli.reciclApp.model.Usuario;
@@ -25,30 +26,39 @@ public class AdminController {
 
     @GetMapping("/asignar")
     public String asignar(Model model) {
-        List<Recoleccion> pendientes = new RecoleccionDAO().listarSinEmpresa();
-        List<Usuario> empresas = new UsuarioDAO().listarPorRol(Rol.EMPRESA_RECOLECTORA);
-        List<Localidad> localidades = new LocalidadDAO().listarTodas();
-        model.addAttribute("pendientes", pendientes);
-        model.addAttribute("empresas", empresas);
-        model.addAttribute("localidades", localidades);
-        
-        return "admin/asignarRecoleccion";
+
+        try {
+            Administrador administrador = new Administrador(null, null, null, null, null, null, null);
+            return administrador.asignarEmpresaARecoleccion(model);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "error"; // Return a default view or error page
+        }
     }
 
     @GetMapping("/roles")
     public String roles(Model model) {
-        List<Usuario> usuarios = new UsuarioDAO().listarTodos();
-        model.addAttribute("usuarios", usuarios);
-        List<Localidad> localidades = new LocalidadDAO().listarTodas();
-        model.addAttribute("localidades", localidades);
-        return "admin/asignarRol";
+       try {
+        Administrador administrador = new Administrador(null, null, null, null, null, null, null);
+        return administrador.asignarRol(model);
+       } catch (Exception e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+        return "error"; // Return a default view or error page
+       }
     }
 
     @GetMapping("/reporte")
     public String reporte(Model model) {
-        List<Recoleccion> reportes = new RecoleccionDAO().obtenerTodas();
-        model.addAttribute("reportes", reportes);
-        return "admin/reporte";
+        try {
+            Administrador administrador = new Administrador(null, null, null, null, null, null, null);
+            return administrador.generarReporte(model);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "error"; // Return a default view or error page
+        }
     }
 
     @PostMapping("/asignarRecoleccion")

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class Recoleccion {
     private String id;
     private Usuario usuario;
-    private EmpresaRecolectora empresa;
+    private Usuario empresa;
     private Residuo residuo;
     private LocalDateTime fechaProgramada;
     private LocalDateTime fechaRecoleccion;
@@ -44,13 +44,7 @@ public class Recoleccion {
         this.usuario = usuario;
     }
 
-    public EmpresaRecolectora getEmpresa() {
-        return empresa;
-    }
 
-    public void setEmpresa(EmpresaRecolectora empresa) {
-        this.empresa = empresa;
-    }
 
     public Residuo getResiduo() {
         return residuo;
@@ -107,4 +101,13 @@ public class Recoleccion {
     public void setPuntos(int puntos) {
         this.puntos = puntos;
     }
+
+    public void setEmpresa(Usuario empresa) {
+        this.empresa = empresa;
+    }
+
+public Usuario getEmpresa() {
+    return empresa;
+}
+
 }

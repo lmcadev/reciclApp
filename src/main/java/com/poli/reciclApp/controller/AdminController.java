@@ -28,7 +28,7 @@ public class AdminController {
     public String asignar(Model model) {
 
         try {
-            Administrador administrador = new Administrador(null, null, null, null, null, null, null);
+            Administrador administrador = new Administrador(null, null, null, null, null, null, null, 0);
             return administrador.asignarEmpresaARecoleccion(model);
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -40,7 +40,7 @@ public class AdminController {
     @GetMapping("/roles")
     public String roles(Model model) {
        try {
-        Administrador administrador = new Administrador(null, null, null, null, null, null, null);
+        Administrador administrador = new Administrador(null, null, null, null, null, null, null, 0);
         return administrador.asignarRol(model);
        } catch (Exception e) {
         // TODO Auto-generated catch block
@@ -52,7 +52,7 @@ public class AdminController {
     @GetMapping("/reporte")
     public String reporte(Model model) {
         try {
-            Administrador administrador = new Administrador(null, null, null, null, null, null, null);
+            Administrador administrador = new Administrador(null, null, null, null, null, null, null, 0);
             return administrador.generarReporte(model);
         } catch (Exception e) {
             // TODO Auto-generated catch block

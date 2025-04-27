@@ -11,8 +11,9 @@ public class Usuario {
     private String direccion;
     private String localidad;
     private Rol rol;
+    private int puntos;
 
-    public Usuario(String id, String nombre, String correo, String contrasena, String telefono, String direccion, String localidad, Rol rol) {
+    public Usuario(String id, String nombre, String correo, String contrasena, String telefono, String direccion, String localidad, Rol rol, int puntos) {
         this.id = id;
         this.nombre = nombre;
         this.correo = correo;
@@ -21,6 +22,7 @@ public class Usuario {
         this.direccion = direccion;
         this.localidad = localidad;
         this.rol = rol;
+        this.puntos = puntos;
     }
 
     public Usuario() {
@@ -66,5 +68,13 @@ public class Usuario {
 
     public void setRol(Rol rol) {
         this.rol = rol;
+    }
+
+    public int getPuntos() {  
+        return puntos;
+    }
+    
+    public void setPuntos(int puntos) {  
+        this.puntos = puntos;
     }
 }

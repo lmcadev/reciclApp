@@ -14,8 +14,8 @@ public class Empresa extends Usuario {
     private TipoResiduo especialidad;
 
 
-    public Empresa(String id, String nombre, String correo, String contrasena, String telefono, String direccion, String localidad, TipoResiduo especialidad) {
-        super(id, nombre, correo, contrasena, telefono, direccion, localidad, Rol.EMPRESA_RECOLECTORA);
+    public Empresa(String id, String nombre, String correo, String contrasena, String telefono, String direccion, String localidad, TipoResiduo especialidad, int puntos) {
+        super(id, nombre, correo, contrasena, telefono, direccion, localidad, Rol.EMPRESA_RECOLECTORA, puntos);
         this.especialidad = especialidad;
     }
 

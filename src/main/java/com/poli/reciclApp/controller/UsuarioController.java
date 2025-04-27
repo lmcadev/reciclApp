@@ -34,13 +34,24 @@ public class UsuarioController {
     }
 
     @GetMapping("/dashboard")
-public String dashboard(HttpSession session, Model model) {
+    public String dashboard(HttpSession session, Model model) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario != null) {
+            model.addAttribute("usuario", usuario);
+        }
+        return "usuario/dashboard";
+    }
+
+    @GetMapping("/puntos")
+public String puntos(HttpSession session, Model model) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
     if (usuario != null) {
-        model.addAttribute("usuario", usuario); 
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("puntos", usuario.getPuntos()); 
     }
-    return "usuario/dashboard";
+    return "usuario/puntos";
 }
+
 
     @GetMapping("/solicitarRecoleccion")
     public String solicitarRecoleccion(HttpSession session, Model model) {
@@ -51,8 +62,6 @@ public String dashboard(HttpSession session, Model model) {
         }
         return "usuario/solicitarRecoleccion";
     }
-
-
 
     @PostMapping("/solicitarRecoleccion")
     public String solicitarRecoleccion(
@@ -94,18 +103,18 @@ public String dashboard(HttpSession session, Model model) {
     }
 
     // POST: cancelar una recolección
-@PostMapping("/cancelarRecoleccion")
-public String cancelarRecoleccion(@RequestParam("idRecoleccion") String id) {
-    new RecoleccionDAO().cancelarRecoleccion(id);
-    return "redirect:/usuario/historial";
-}
+    @PostMapping("/cancelarRecoleccion")
+    public String cancelarRecoleccion(@RequestParam("idRecoleccion") String id) {
+        new RecoleccionDAO().cancelarRecoleccion(id);
+        return "redirect:/usuario/historial";
+    }
 
-// POST: editar fecha de recolección
-@PostMapping("/editarRecoleccion")
-public String editarRecoleccion(@RequestParam("idRecoleccion") String id,
-                                @RequestParam("nuevaFecha") String nuevaFecha) {
-    new RecoleccionDAO().editarFechaRecoleccion(id, LocalDateTime.parse(nuevaFecha));
-    return "redirect:/usuario/historial";
-}
+    // POST: editar fecha de recolección
+    @PostMapping("/editarRecoleccion")
+    public String editarRecoleccion(@RequestParam("idRecoleccion") String id,
+            @RequestParam("nuevaFecha") String nuevaFecha) {
+        new RecoleccionDAO().editarFechaRecoleccion(id, LocalDateTime.parse(nuevaFecha));
+        return "redirect:/usuario/historial";
+    }
 
 }

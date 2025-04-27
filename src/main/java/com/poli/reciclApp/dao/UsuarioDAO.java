@@ -31,7 +31,8 @@ public class UsuarioDAO {
                         rs.getString("telefono"),
                         rs.getString("direccion"),
                         null,
-                        rol
+                        rol,
+                        rs.getInt("puntos")
                 );
                 lista.add(u);
             }
@@ -61,7 +62,8 @@ public class UsuarioDAO {
                     rs.getString("telefono"),
                     rs.getString("direccion"),
                     null,
-                    Rol.valueOf(rs.getString("rol"))
+                    Rol.valueOf(rs.getString("rol")),
+                    rs.getInt("puntos")
                 );
             }
         } catch (SQLException e) {
@@ -90,7 +92,8 @@ public class UsuarioDAO {
                     rs.getString("telefono"),
                     rs.getString("direccion"),
                     null,
-                    Rol.valueOf(rs.getString("rol"))
+                    Rol.valueOf(rs.getString("rol")),
+                    rs.getInt("puntos")
                 );
             }
     
@@ -118,7 +121,7 @@ public class UsuarioDAO {
                         rs.getString("telefono"),
                         rs.getString("direccion"),
                         null,
-                        Rol.valueOf(rs.getString("rol"))
+                        Rol.valueOf(rs.getString("rol")), 0
                 );
                 lista.add(u);
             }

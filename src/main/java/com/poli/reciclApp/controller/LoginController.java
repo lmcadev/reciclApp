@@ -48,7 +48,7 @@ public class LoginController {
                     response.sendRedirect("/empresa/dashboard");
                     break;
                 case USUARIO:
-                    response.sendRedirect("/usuario/historial");
+                    response.sendRedirect("/usuario/dashboard");
                     break;
             }
         } else {

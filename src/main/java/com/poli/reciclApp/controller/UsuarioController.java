@@ -33,11 +33,32 @@ public class UsuarioController {
         return "usuario/historial";
     }
 
+    @GetMapping("/dashboard")
+public String dashboard(HttpSession session, Model model) {
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+    if (usuario != null) {
+        model.addAttribute("usuario", usuario); 
+    }
+    return "usuario/dashboard";
+}
+
+    @GetMapping("/solicitarRecoleccion")
+    public String solicitarRecoleccion(HttpSession session, Model model) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario != null) {
+            model.addAttribute("tiposResiduo", TipoResiduo.values());
+            model.addAttribute("usuario", usuario);
+        }
+        return "usuario/solicitarRecoleccion";
+    }
+
+
+
     @PostMapping("/solicitarRecoleccion")
     public String solicitarRecoleccion(
             @RequestParam("tipoResiduo") String tipoResiduo,
             @RequestParam("peso") float peso,
-            @RequestParam("fecha") String fecha,
+            @RequestParam("fechaHora") String fechaHora,
             HttpSession session) {
 
         Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -53,7 +74,7 @@ public class UsuarioController {
         recoleccion.setId(UUIDGenerator.generar());
         recoleccion.setUsuario(usuario);
         recoleccion.setResiduo(residuo);
-        recoleccion.setFechaProgramada(LocalDateTime.parse(fecha + "T08:00:00"));
+        recoleccion.setFechaProgramada(LocalDateTime.parse(fechaHora));
         recoleccion.setTurno("Mañana");
         recoleccion.setFrecuencia(Frecuencia.BAJO_DEMANDA);
         recoleccion.setEstado(EstadoRecoleccion.PROGRAMADA);
@@ -71,4 +92,20 @@ public class UsuarioController {
 
         return "redirect:/usuario/historial";
     }
+
+    // POST: cancelar una recolección
+@PostMapping("/cancelarRecoleccion")
+public String cancelarRecoleccion(@RequestParam("idRecoleccion") String id) {
+    new RecoleccionDAO().cancelarRecoleccion(id);
+    return "redirect:/usuario/historial";
+}
+
+// POST: editar fecha de recolección
+@PostMapping("/editarRecoleccion")
+public String editarRecoleccion(@RequestParam("idRecoleccion") String id,
+                                @RequestParam("nuevaFecha") String nuevaFecha) {
+    new RecoleccionDAO().editarFechaRecoleccion(id, LocalDateTime.parse(nuevaFecha));
+    return "redirect:/usuario/historial";
+}
+
 }

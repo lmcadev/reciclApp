@@ -31,7 +31,6 @@ public class EmpresaController {
 
     @GetMapping("/registrarPeso")
     public String registrarPesoVista(HttpSession session, Model model) {
-        
         Usuario empresa = (Usuario) session.getAttribute("usuario");
         List<Recoleccion> recolecciones = new RecoleccionDAO().listarPorEmpresa(empresa.getId());
         model.addAttribute("recolecciones", recolecciones);

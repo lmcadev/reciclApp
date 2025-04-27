@@ -12,13 +12,18 @@
 <body class="bg-light">
     <jsp:include page="../navbar.jsp" />
 <div class="container mt-4">
-    <h2 class="text-center">Bienvenido, <%= usuario.getNombre() %> 👋</h2>
-    <div class="row mt-4">
-        <div class="col-md-3"><a href="solicitarRecoleccion.jsp" class="btn btn-outline-success w-100">Solicitar recolección</a></div>
-        <div class="col-md-3"><a href="historial.jsp" class="btn btn-outline-primary w-100">Ver historial</a></div>
-        <div class="col-md-3"><a href="puntos.jsp" class="btn btn-outline-warning w-100">Mis puntos</a></div>
-        <div class="col-md-3"><a href="notificaciones.jsp" class="btn btn-outline-info w-100">Notificaciones</a></div>
+    <h2 class="text-center">Bienvenido, <%= usuario.getNombre() %></h2>
+   
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="list-group">
+        <a href="${pageContext.request.contextPath}/usuario/solicitarRecoleccion" class="list-group-item list-group-item-action">Solicitar recolección</a>
+        <a href="${pageContext.request.contextPath}/usuario/historial" class="list-group-item list-group-item-action">Ver historial</a>
+        <a href="${pageContext.request.contextPath}/usuario/puntos" class="list-group-item list-group-item-action">Mis puntos</a>
+        <a href="${pageContext.request.contextPath}/usuario/notificaciones" class="list-group-item list-group-item-action">Notificaciones</a>        
+        </div>
     </div>
+</div>
 </div>
 <jsp:include page="../footer.jsp" />
 

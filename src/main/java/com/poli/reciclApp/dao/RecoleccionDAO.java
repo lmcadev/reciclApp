@@ -10,6 +10,7 @@ import com.poli.reciclApp.util.DBConnection;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -172,6 +173,32 @@ public class RecoleccionDAO {
 
         return false;
     }
+
+    // Cancela una recolección
+public void cancelarRecoleccion(String idRecoleccion) {
+    String sql = "UPDATE recoleccion SET estado = 'CANCELADO' WHERE id = ?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, idRecoleccion);
+        stmt.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
+// Edita la fecha de una recolección
+public void editarFechaRecoleccion(String idRecoleccion, LocalDateTime nuevaFecha) {
+    String sql = "UPDATE recoleccion SET fecha_programada = ? WHERE id = ?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setTimestamp(1, Timestamp.valueOf(nuevaFecha));
+        stmt.setString(2, idRecoleccion);
+        stmt.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
 
     public List<Recoleccion> listarSinEmpresa() {
         List<Recoleccion> lista = new ArrayList<>();

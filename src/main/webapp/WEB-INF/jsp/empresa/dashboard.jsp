@@ -31,6 +31,9 @@
                 <a href="${pageContext.request.contextPath}/empresa/registrarPeso" class="list-group-item list-group-item-action">
                     Registrar Pesos de Residuos
                 </a>
+                <a href="${pageContext.request.contextPath}/empresa/historial" class="list-group-item list-group-item-action">
+                    Ver Historial de Recolecciones
+                </a>
             </div>
         </div>
     </div>

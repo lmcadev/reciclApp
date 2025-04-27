@@ -117,6 +117,19 @@ public class Usuario {
         this.puntos = puntos;
     }
 
+    /**
+     * Solicita la recolección de un residuo, registra la información del residuo, 
+     * la recolección programada y envía una notificación al usuario.
+     *
+     * @param tipoResiduo El tipo de residuo a recolectar (debe coincidir con los valores de TipoResiduo).
+     * @param peso El peso del residuo en kilogramos.
+     * @param fechaHora La fecha y hora programada para la recolección en formato ISO-8601 (yyyy-MM-ddTHH:mm).
+     * @param session La sesión HTTP actual que contiene la información del usuario.
+     * @return Una cadena que redirige al historial del usuario después de registrar la solicitud.
+     * 
+     * @throws IllegalArgumentException Si el tipo de residuo no coincide con los valores de TipoResiduo.
+     * @throws DateTimeParseException Si el formato de fechaHora no es válido.
+     */
     public String solicitarRecoleccion(String tipoResiduo, float peso, String fechaHora, HttpSession session) {
 
         Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -151,6 +164,18 @@ public class Usuario {
         return "redirect:/usuario/historial";
     }
 
+    /**
+     * Recupera el historial de recolecciones asociado al usuario que ha iniciado sesión y lo agrega al modelo.
+     * 
+     * @param session la sesión HTTP que contiene los atributos de la sesión del usuario
+     * @param model   el modelo al que se añadirá el historial de recolecciones del usuario
+     * @return el nombre de la vista que se renderizará, específicamente "usuario/historial"
+     * 
+     * Este método verifica si hay un usuario almacenado en la sesión. Si se encuentra un usuario,
+     * recupera su historial de recolecciones utilizando el RecoleccionDAO y lo agrega al modelo
+     * bajo el atributo "historial". Si no se encuentra un usuario en la sesión, el método simplemente
+     * devuelve el nombre de la vista sin modificar el modelo.
+     */
     public String consultarHistorial(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario != null) {
@@ -169,6 +194,16 @@ public class Usuario {
         return null;
     }
 
+    /**
+     * Recupera los puntos del usuario actualmente autenticado y los agrega al modelo.
+     *
+     * @param session la sesión HTTP actual, utilizada para recuperar al usuario autenticado
+     * @param model   el modelo al que se añadirá la información del usuario y sus puntos
+     * @return el nombre de la vista que se renderizará, específicamente "usuario/puntos"
+     *
+     * Si se encuentra un usuario en la sesión, su información y puntos se añaden al modelo.
+     * De lo contrario, el modelo permanece sin cambios.
+     */
     public String verPuntos(HttpSession session, Model model) {
 
         Usuario usuario = (Usuario) session.getAttribute("usuario");

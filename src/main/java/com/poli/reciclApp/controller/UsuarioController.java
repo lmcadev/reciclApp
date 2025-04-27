@@ -10,32 +10,36 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
+/**
+ * Controlador para manejar las solicitudes relacionadas con los usuarios.
+ * 
+ * Este controlador proporciona varios endpoints para gestionar las acciones
+ * del usuario.
+ * 
+ * Los métodos de este controlador interactúan con la sesión HTTP para recuperar
+ * la información del usuario conectado y utilizan el modelo para pasar datos a
+ * las vistas correspondientes.
+ * 
+ * Endpoints manejados:
+ * - GET /usuario/historial: Muestra el historial del usuario.
+ * - GET /usuario/dashboard: Muestra el dashboard del usuario.
+ * - GET /usuario/puntos: Muestra los puntos acumulados por el usuario.
+ * - GET /usuario/solicitarRecoleccion: Muestra la página para solicitar una recolección.
+ * - POST /usuario/solicitarRecoleccion: Procesa la solicitud de recolección.
+ * - POST /usuario/cancelarRecoleccion: Cancela una solicitud de recolección.
+ * - POST /usuario/editarRecoleccion: Edita la fecha de una recolección existente.
+ * 
+ * Este controlador utiliza las siguientes clases:
+ * - Usuario: Representa al usuario conectado.
+ * - TipoResiduo: Enumera los tipos de residuos disponibles.
+ * - RecoleccionDAO: Proporciona acceso a los datos relacionados con las recolecciones.
+ * 
+ * Las vistas correspondientes se encuentran en la carpeta "usuario" y están
+ * organizadas según las acciones realizadas por el usuario.
+ */
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
-
-    
-    
-    /**
-     * Maneja la solicitud GET para mostrar la página del historial del usuario.
-     * 
-     * Este método recupera la sesión actual del usuario y verifica si hay un usuario 
-     * conectado. Si se encuentra un usuario en la sesión, invoca el método para 
-     * consultar el historial del usuario y llena el modelo con los datos relevantes.
-     * 
-     * @param session el objeto de sesión HTTP utilizado para recuperar el usuario conectado
-     * @param model el objeto modelo utilizado para pasar datos a la vista
-     * @return el nombre de la plantilla de vista para la página del historial del usuario
-     */
-    @GetMapping("/historial")
-    public String verHistorial(HttpSession session, Model model) {
-        
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario != null) {
-            usuario.consultarHistorial(session, model);
-        }
-        return "usuario/historial";
-    }
 
     /**
      * Maneja las solicitudes GET al endpoint "/dashboard".
@@ -54,6 +58,25 @@ public class UsuarioController {
         }
         return "usuario/dashboard";
     }
+    
+    /**
+     * Maneja la solicitud GET para mostrar la página del historial del usuario.
+     * 
+     * Este método recupera la sesión actual del usuario y verifica si hay un usuario 
+     * conectado. Si se encuentra un usuario en la sesión, invoca el método para 
+     * consultar el historial del usuario y llena el modelo con los datos relevantes.
+     * 
+     * @param session el objeto de sesión HTTP utilizado para recuperar el usuario conectado
+     * @param model el objeto modelo utilizado para pasar datos a la vista
+     */
+    @GetMapping("/historial")
+    public void verHistorial(HttpSession session, Model model) {
+        
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario != null) {
+            usuario.consultarHistorial(session, model);
+        }
+    }
 
     
     /**
@@ -62,16 +85,15 @@ public class UsuarioController {
      *
      * @param session la sesión HTTP actual, utilizada para recuperar el usuario conectado.
      * @param model   el objeto modelo utilizado para pasar atributos a la vista.
-     * @return el nombre de la vista que se renderizará, en este caso, "usuario/puntos".
      */
     @GetMapping("/puntos")
-public String puntos(HttpSession session, Model model) {
+public void puntos(HttpSession session, Model model) {
     
     Usuario usuario = (Usuario) session.getAttribute("usuario");
     if (usuario != null) {
         usuario.verPuntos(session, model);
     }
-    return "usuario/puntos";
+    
 }
 
 
@@ -81,7 +103,6 @@ public String puntos(HttpSession session, Model model) {
      * 
      * @param session la sesión HTTP actual, utilizada para recuperar el usuario conectado.
      * @param model   el objeto modelo utilizado para pasar atributos a la vista.
-     * @return el nombre de la plantilla de vista para la página de solicitud de recolección de residuos.
      * 
      * El método verifica si un usuario ha iniciado sesión recuperando el atributo "usuario" de la sesión.
      * Si el usuario está presente, agrega la lista de tipos de residuos (TipoResiduo.values())
@@ -104,10 +125,9 @@ public String puntos(HttpSession session, Model model) {
      * @param peso           El peso del residuo a recolectar, proporcionado como un número flotante.
      * @param fechaHora      La fecha y hora programada para la recolección, proporcionada como una cadena.
      * @param session        El objeto de sesión HTTP utilizado para recuperar la información del usuario actual.
-     * @return               Una cadena de redirección a la página del historial de recolecciones del usuario.
      */
     @PostMapping("/solicitarRecoleccion")
-    public String solicitarRecoleccion(
+    public void solicitarRecoleccion(
             @RequestParam("tipoResiduo") String tipoResiduo,
             @RequestParam("peso") float peso,
             @RequestParam("fechaProgramada") String fechaHora,
@@ -116,7 +136,6 @@ public String puntos(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         usuario.solicitarRecoleccion(tipoResiduo, peso, fechaHora, session);
 
-        return "redirect:/usuario/historial";
     }
 
     

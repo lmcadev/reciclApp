@@ -1,13 +1,20 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.poli.reciclApp.model.Usuario" %>
+<%@ page import="com.poli.reciclApp.model.Localidad" %>
+
 <%
     List<Usuario> usuarios = (List<Usuario>) request.getAttribute("usuarios");
+    List<Localidad> localidades = (List<Localidad>) request.getAttribute("localidades");
+
+    String mensajeExito = (String) request.getAttribute("mensajeExito");
+    String mensajeError = (String) request.getAttribute("mensajeError");
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Asignar Roles</title>
+    <title>Gestión de Usuarios</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -17,38 +24,43 @@
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="text-center flex-grow-1">Gestión de Usuarios</h3>
-
-        <!-- Botón para abrir modal de Agregar -->
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarUsuario">
-            Agregar Usuario
-        </button>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarUsuario">Agregar Usuario</button>
     </div>
 
+    <!-- Mensajes -->
+    <% if (mensajeExito != null) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= mensajeExito %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <% } %>
+    <% if (mensajeError != null) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= mensajeError %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <% } %>
+
+    <!-- Tabla de Usuarios -->
     <table class="table table-striped table-hover bg-white shadow-sm">
         <thead class="table-primary">
             <tr>
                 <th>Nombre</th>
                 <th>Correo</th>
-                <th>Rol actual</th>
+                <th>Rol</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            <%
-                for (Usuario u : usuarios) {
-            %>
+            <% for (Usuario u : usuarios) { %>
             <tr>
                 <td><%= u.getNombre() %></td>
                 <td><%= u.getCorreo() %></td>
                 <td><%= u.getRol() %></td>
                 <td class="d-flex gap-2">
-                    <!-- Botón Editar (abre modal específico de cada usuario) -->
-                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario<%= u.getId() %>">
-                        Editar
-                    </button>
+                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario<%= u.getId() %>">Editar</button>
 
-                    <!-- Botón Eliminar -->
-                    <form action="${pageContext.request.contextPath}/admin/eliminarUsuario" method="post" onsubmit="return confirm('¿Eliminar este usuario?');">
+                    <form action="${pageContext.request.contextPath}/admin/eliminarUsuario" method="post" onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?');">
                         <input type="hidden" name="usuarioId" value="<%= u.getId() %>"/>
                         <button class="btn btn-sm btn-danger">Eliminar</button>
                     </form>
@@ -56,13 +68,13 @@
             </tr>
 
             <!-- Modal Editar Usuario -->
-            <div class="modal fade" id="modalEditarUsuario<%= u.getId() %>" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel<%= u.getId() %>" aria-hidden="true">
+            <div class="modal fade" id="modalEditarUsuario<%= u.getId() %>" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="${pageContext.request.contextPath}/admin/editarUsuario" method="post">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="modalEditarUsuarioLabel<%= u.getId() %>">Editar Usuario</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                <h5 class="modal-title">Editar Usuario</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
                                 <input type="hidden" name="usuarioId" value="<%= u.getId() %>"/>
@@ -76,16 +88,26 @@
                                     <input type="email" name="correo" class="form-control" value="<%= u.getCorreo() %>" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label>Telefonó</label>
+                                    <label>Teléfono</label>
                                     <input type="text" name="telefono" class="form-control" value="<%= u.getTelefono() %>">
                                 </div>
                                 <div class="mb-3">
-                                    <label>Direccion</label>
+                                    <label>Dirección</label>
                                     <input type="text" name="direccion" class="form-control" value="<%= u.getDireccion() %>">
                                 </div>
                                 <div class="mb-3">
                                     <label>Localidad</label>
-                                    <input type="text" name="localidad_id" class="form-control" value="<%= u.getLocalidad() != null ? u.getLocalidad().getId() : "" %>">
+                                    <select name="localidad_id" class="form-select">
+                                        <% if (localidades != null) { 
+                                            for (Localidad loc : localidades) { %>
+                                                <option value="<%= loc.getId() %>"><%= loc.getNombre() %></option>
+                                        <%  } 
+                                        } else { %>
+                                            <option>No hay localidades disponibles</option>
+                                        <% } %>
+                                    </select>
+                                    
+                                    
                                 </div>
                                 <div class="mb-3">
                                     <label>Rol</label>
@@ -103,21 +125,19 @@
                     </div>
                 </div>
             </div>
-            <%
-                }
-            %>
+            <% } %>
         </tbody>
     </table>
 </div>
 
 <!-- Modal Agregar Usuario -->
-<div class="modal fade" id="modalAgregarUsuario" tabindex="-1" aria-labelledby="modalAgregarUsuarioLabel" aria-hidden="true">
+<div class="modal fade" id="modalAgregarUsuario" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <form action="${pageContext.request.contextPath}/admin/agregarUsuario" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalAgregarUsuarioLabel">Agregar Nuevo Usuario</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    <h5 class="modal-title">Agregar Nuevo Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
@@ -133,16 +153,26 @@
                         <input type="password" name="contrasena" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label>Telefonó</label>
+                        <label>Teléfono</label>
                         <input type="text" name="telefono" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label>Direccion</label>
+                        <label>Dirección</label>
                         <input type="text" name="direccion" class="form-control">
                     </div>
                     <div class="mb-3">
                         <label>Localidad</label>
-                        <input type="text" name="localidad_id" class="form-control">
+                        <select name="localidad_id" class="form-select">
+                            <% if (localidades != null) { 
+                                for (Localidad loc : localidades) { %>
+                                    <option value="<%= loc.getId() %>"><%= loc.getNombre() %></option>
+                            <%  } 
+                            } else { %>
+                                <option>No hay localidades disponibles</option>
+                            <% } %>
+                        </select>
+                        
+                        
                     </div>
                     <div class="mb-3">
                         <label>Rol</label>
@@ -163,7 +193,6 @@
 
 <jsp:include page="../footer.jsp" />
 
-<!-- Bootstrap scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

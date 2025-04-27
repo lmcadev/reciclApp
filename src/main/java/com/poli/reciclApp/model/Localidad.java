@@ -26,5 +26,13 @@ public class Localidad {
     public void setDiaRecoleccionOrganico(String diaRecoleccionOrganico) {
         this.diaRecoleccionOrganico = diaRecoleccionOrganico;
     }
+    public Localidad(String id, String nombre, String diaRecoleccionOrganico) {
+        this.id = id;
+        this.nombre = nombre;
+        this.diaRecoleccionOrganico = diaRecoleccionOrganico;
+    }
+    public Localidad() {
+        //TODO Auto-generated constructor stub
+    }
 }
 

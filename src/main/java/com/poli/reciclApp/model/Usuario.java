@@ -9,10 +9,10 @@ public class Usuario {
     private String contrasena;
     private String telefono;
     private String direccion;
-    private Localidad localidad;
+    private String localidad;
     private Rol rol;
 
-    public Usuario(String id, String nombre, String correo, String contrasena, String telefono, String direccion, Localidad localidad, Rol rol) {
+    public Usuario(String id, String nombre, String correo, String contrasena, String telefono, String direccion, String localidad, Rol rol) {
         this.id = id;
         this.nombre = nombre;
         this.correo = correo;
@@ -33,7 +33,7 @@ public class Usuario {
     public String getContrasena() { return contrasena; }
     public String getTelefono() { return telefono; }
     public String getDireccion() { return direccion; }
-    public Localidad getLocalidad() { return localidad; }
+    public String getLocalidad() { return localidad; }
     public Rol getRol() { return rol; }
 
     public void setId(String id) {
@@ -60,7 +60,7 @@ public class Usuario {
         this.direccion = direccion;
     }
 
-    public void setLocalidad(Localidad localidad) {
+    public void setLocalidad(String localidad) {
         this.localidad = localidad;
     }
 

@@ -8,6 +8,7 @@ import com.poli.reciclApp.util.UUIDGenerator;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class UsuarioDAO {
 
@@ -144,26 +145,54 @@ public class UsuarioDAO {
         return false;
     }
 
-    public boolean registrar(Usuario usuario) {
-        String sql = "INSERT INTO usuario (id, nombre, correo, contrasena, telefono, direccion, localidad_id, rol) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+
+    public boolean registrar(Usuario usuario) throws SQLException {
+       
+        if (existeCorreo(usuario.getCorreo())) {
+            throw new SQLException("El correo ya está registrado: " + usuario.getCorreo());
+        }
+    
+        String sql = "INSERT INTO usuario (id, nombre, correo, contrasena, telefono, direccion, localidad_id, rol) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                // Generar un nuevo UUID si el ID es nulo o vacío
+            if (usuario.getId() == null || usuario.getId().isEmpty()) {
+                usuario.setId(UUID.randomUUID().toString());
+            }
     
-            stmt.setString(1, UUIDGenerator.generar());
+            stmt.setString(1, usuario.getId());
             stmt.setString(2, usuario.getNombre());
             stmt.setString(3, usuario.getCorreo());
             stmt.setString(4, usuario.getContrasena());
-            stmt.setString(5, usuario.getTelefono() != null ? usuario.getTelefono() : "");
-            stmt.setString(6, usuario.getDireccion() != null ? usuario.getDireccion() : "");
-            stmt.setString(6, usuario.getLocalidad() != null ? usuario.getLocalidad().getId() : "");
-            stmt.setString(7, usuario.getRol().name());
+            stmt.setString(5, usuario.getTelefono());
+            stmt.setString(6, usuario.getDireccion());
+            stmt.setString(7, usuario.getLocalidad());
+          
+            stmt.setString(8, usuario.getRol().name());
+
+            System.out.println("Registrando usuario:");
+            System.out.println("ID: " + usuario.getId());
+            System.out.println("Nombre: " + usuario.getNombre());
+            System.out.println("Correo: " + usuario.getCorreo());
+            System.out.println("Contraseña: " + usuario.getContrasena());
+            System.out.println("Teléfono: " + usuario.getTelefono());
+            System.out.println("Dirección: " + usuario.getDireccion());
+            System.out.println("Localidad ID: " + usuario.getLocalidad());
+            System.out.println("Rol: " + usuario.getRol().name());
     
             return stmt.executeUpdate() == 1;
-        } catch (SQLException e) {
+        }  catch (SQLException e) {
             e.printStackTrace();
         }
+
         return false;
     }
+    
+    
     
     public boolean editarUsuario(String id, String nombre, String correo, String telefono, String direccion, String localidad_id, Rol rol) {
         String sql = "UPDATE usuario SET nombre = ?, correo = ?, telefono = ?, direccion = ?, localidad_id = ?,rol = ? WHERE id = ?";
@@ -198,4 +227,24 @@ public class UsuarioDAO {
         }
         return false;
     }
+
+    public boolean existeCorreo(String correo) {
+        String sql = "SELECT COUNT(*) FROM usuario WHERE correo = ?";
+    
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    
+            stmt.setString(1, correo);
+            ResultSet rs = stmt.executeQuery();
+    
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
 }

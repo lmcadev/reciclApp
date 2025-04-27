@@ -3,6 +3,7 @@ package com.poli.reciclApp.controller;
 import com.poli.reciclApp.dao.LocalidadDAO;
 import com.poli.reciclApp.dao.RecoleccionDAO;
 import com.poli.reciclApp.dao.UsuarioDAO;
+import com.poli.reciclApp.model.Localidad;
 import com.poli.reciclApp.model.Recoleccion;
 import com.poli.reciclApp.model.Usuario;
 import com.poli.reciclApp.model.enums.Rol;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Controller
@@ -25,8 +27,11 @@ public class AdminController {
     public String asignar(Model model) {
         List<Recoleccion> pendientes = new RecoleccionDAO().listarSinEmpresa();
         List<Usuario> empresas = new UsuarioDAO().listarPorRol(Rol.EMPRESA_RECOLECTORA);
+        List<Localidad> localidades = new LocalidadDAO().listarTodas();
         model.addAttribute("pendientes", pendientes);
         model.addAttribute("empresas", empresas);
+        model.addAttribute("localidades", localidades);
+        
         return "admin/asignarRecoleccion";
     }
 
@@ -34,6 +39,8 @@ public class AdminController {
     public String roles(Model model) {
         List<Usuario> usuarios = new UsuarioDAO().listarTodos();
         model.addAttribute("usuarios", usuarios);
+        List<Localidad> localidades = new LocalidadDAO().listarTodas();
+        model.addAttribute("localidades", localidades);
         return "admin/asignarRol";
     }
 
@@ -73,9 +80,14 @@ public class AdminController {
         nuevo.setContrasena(contrasena);
         nuevo.setTelefono(telefono);
         nuevo.setDireccion(direccion);
-        nuevo.setLocalidad(new LocalidadDAO().buscarPorId(localidad_id)); 
+        nuevo.setLocalidad(localidad_id);
         nuevo.setRol(rol);
-        new UsuarioDAO().registrar(nuevo);
+        try {
+            new UsuarioDAO().registrar(nuevo);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return "redirect:/admin/roles";
     }
 

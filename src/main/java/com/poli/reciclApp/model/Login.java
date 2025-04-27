@@ -18,7 +18,7 @@ public class Login {
 
 
 if (encontrado != null) {
-    System.out.println("Encontrado: " + encontrado.getCorreo() + " / " + encontrado.getContrasena());
+    System.out.println("Encontrado: " + encontrado.getCorreo());
 }
 
         if (encontrado != null && encontrado.getContrasena().equals(contrasena)) {

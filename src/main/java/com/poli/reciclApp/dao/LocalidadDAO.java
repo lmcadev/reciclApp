@@ -31,6 +31,7 @@ public class LocalidadDAO {
 
     public Localidad buscarPorId(String id) {
         String sql = "SELECT * FROM localidad WHERE id = ?";
+        System.out.println("ID recibido para buscar localidad: " + id);
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -52,22 +53,22 @@ public class LocalidadDAO {
     }
 
 
+
+
     public List<Localidad> listarTodas() {
         List<Localidad> localidades = new ArrayList<>();
-        String sql = "SELECT * FROM localidad ORDER BY nombre ASC";
-
+        String sql = "SELECT id, nombre FROM localidad"; // Tu tabla de localidad
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Localidad l = new Localidad(
-                    rs.getString("id"),
-                    rs.getString("nombre")
-                );
-                localidades.add(l);
-            }
-
+    
+                while (rs.next()) {
+                    Localidad loc = new Localidad();
+                    loc.setId(rs.getString("id"));
+                    loc.setNombre(rs.getString("nombre"));
+                    localidades.add(loc);
+                }
+                
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -3,7 +3,7 @@ import com.poli.reciclApp.model.enums.Rol;
 
 
 public class Administrador extends Usuario {
-    public Administrador(String id, String nombre, String correo, String contrasena, String telefono, String direccion, Localidad localidad) {
+    public Administrador(String id, String nombre, String correo, String contrasena, String telefono, String direccion, String localidad) {
         super(id, nombre, correo, contrasena, telefono, direccion, localidad, Rol.ADMINISTRADOR);
     }
 

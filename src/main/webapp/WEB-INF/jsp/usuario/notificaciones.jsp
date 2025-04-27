@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="java.util.List, model.Notificacion" %>
+<%@ page import="java.util.List, com.poli.reciclApp.model.Notificacion" %>
 <%
     List<Notificacion> notificaciones = (List<Notificacion>) request.getAttribute("notificaciones");
 %>

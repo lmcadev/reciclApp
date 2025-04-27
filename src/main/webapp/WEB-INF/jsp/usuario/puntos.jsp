@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="model.Usuario" %>
+<%@ page import="com.poli.reciclApp.model.Usuario" %>
 <%
     Usuario usuario = (Usuario) session.getAttribute("usuario");
     int puntos = (Integer) request.getAttribute("puntos");

@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="java.util.List, model.Recoleccion" %>
+<%@ page import="java.util.List, com.poli.reciclApp.model.Recoleccion" %>
 <%
     List<Recoleccion> pendientes = (List<Recoleccion>) request.getAttribute("pendientes");
 %>

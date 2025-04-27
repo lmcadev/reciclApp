@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="java.util.List, model.Recoleccion" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.poli.reciclApp.model.Recoleccion" %>
+
 <%
     List<Recoleccion> reportes = (List<Recoleccion>) request.getAttribute("reportes");
 %>
@@ -30,13 +32,13 @@
                 for (Recoleccion r : reportes) {
             %>
             <tr>
-                <td><%= r.getUsuario().getNombre() %></td>
+                <td><%= r.getUsuario() != null ? r.getUsuario().getNombre() : "No disponible" %></td>
                 <td><%= r.getEmpresa() != null ? r.getEmpresa().getNombre() : "No asignada" %></td>
-                <td><%= r.getResiduo().getTipo() %></td>
-                <td><%= r.getResiduo().getPeso() %></td>
-                <td><%= r.getFechaProgramada() %></td>
-                <td><%= r.getEstado() %></td>
+                <td><%= r.getResiduo() != null ? r.getResiduo().getTipo() : "No disponible" %></td>
+                <td><%= r.getResiduo() != null ? r.getResiduo().getPeso() : "N/A" %></td>
+                <td><%= r.getFechaProgramada() != null ? r.getFechaProgramada() : "Sin fecha" %></td>
             </tr>
+            
             <%
                 }
             %>

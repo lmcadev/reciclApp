@@ -1,38 +1,51 @@
 package com.poli.reciclApp.controller;
 
-import com.poli.reciclApp.dao.NotificacionDAO;
+
 import com.poli.reciclApp.dao.RecoleccionDAO;
-import com.poli.reciclApp.dao.ResiduoDAO;
-import com.poli.reciclApp.model.Notificacion;
-import com.poli.reciclApp.model.Recoleccion;
-import com.poli.reciclApp.model.Residuo;
 import com.poli.reciclApp.model.Usuario;
-import com.poli.reciclApp.model.enums.EstadoRecoleccion;
-import com.poli.reciclApp.model.enums.Frecuencia;
-import com.poli.reciclApp.model.enums.TipoNotificacion;
 import com.poli.reciclApp.model.enums.TipoResiduo;
-import com.poli.reciclApp.model.enums.EstadoSesion;
-import com.poli.reciclApp.util.UUIDGenerator;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
 
+    
+    
+    /**
+     * Maneja la solicitud GET para mostrar la página del historial del usuario.
+     * 
+     * Este método recupera la sesión actual del usuario y verifica si hay un usuario 
+     * conectado. Si se encuentra un usuario en la sesión, invoca el método para 
+     * consultar el historial del usuario y llena el modelo con los datos relevantes.
+     * 
+     * @param session el objeto de sesión HTTP utilizado para recuperar el usuario conectado
+     * @param model el objeto modelo utilizado para pasar datos a la vista
+     * @return el nombre de la plantilla de vista para la página del historial del usuario
+     */
     @GetMapping("/historial")
     public String verHistorial(HttpSession session, Model model) {
+        
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario != null) {
-            model.addAttribute("historial", new RecoleccionDAO().obtenerPorUsuario(usuario.getId()));
+            usuario.consultarHistorial(session, model);
         }
         return "usuario/historial";
     }
 
+    /**
+     * Maneja las solicitudes GET al endpoint "/dashboard".
+     * Recupera el usuario actual de la sesión HTTP y lo agrega al modelo
+     * si el usuario ha iniciado sesión. Devuelve el nombre de la vista para el dashboard del usuario.
+     *
+     * @param session la sesión HTTP que contiene la información del usuario
+     * @param model   el modelo para pasar atributos a la vista
+     * @return el nombre de la vista para el dashboard del usuario ("usuario/dashboard")
+     */
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -42,17 +55,38 @@ public class UsuarioController {
         return "usuario/dashboard";
     }
 
+    
+    /**
+     * Maneja la solicitud HTTP GET para el endpoint "/puntos".
+     * Este método recupera la sesión del usuario actual y muestra sus puntos.
+     *
+     * @param session la sesión HTTP actual, utilizada para recuperar el usuario conectado.
+     * @param model   el objeto modelo utilizado para pasar atributos a la vista.
+     * @return el nombre de la vista que se renderizará, en este caso, "usuario/puntos".
+     */
     @GetMapping("/puntos")
 public String puntos(HttpSession session, Model model) {
+    
     Usuario usuario = (Usuario) session.getAttribute("usuario");
     if (usuario != null) {
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("puntos", usuario.getPuntos()); 
+        usuario.verPuntos(session, model);
     }
     return "usuario/puntos";
 }
 
 
+    /**
+     * Maneja la solicitud GET para el endpoint "solicitarRecoleccion".
+     * Este método se utiliza para mostrar la página donde un usuario puede solicitar una recolección de residuos.
+     * 
+     * @param session la sesión HTTP actual, utilizada para recuperar el usuario conectado.
+     * @param model   el objeto modelo utilizado para pasar atributos a la vista.
+     * @return el nombre de la plantilla de vista para la página de solicitud de recolección de residuos.
+     * 
+     * El método verifica si un usuario ha iniciado sesión recuperando el atributo "usuario" de la sesión.
+     * Si el usuario está presente, agrega la lista de tipos de residuos (TipoResiduo.values())
+     * y el objeto usuario al modelo. Estos atributos se utilizan en la vista para mostrar información relevante.
+     */
     @GetMapping("/solicitarRecoleccion")
     public String solicitarRecoleccion(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -63,53 +97,54 @@ public String puntos(HttpSession session, Model model) {
         return "usuario/solicitarRecoleccion";
     }
 
+    /**
+     * Maneja la solicitud para programar una recolección de residuos.
+     *
+     * @param tipoResiduo    El tipo de residuo a recolectar, proporcionado como una cadena.
+     * @param peso           El peso del residuo a recolectar, proporcionado como un número flotante.
+     * @param fechaHora      La fecha y hora programada para la recolección, proporcionada como una cadena.
+     * @param session        El objeto de sesión HTTP utilizado para recuperar la información del usuario actual.
+     * @return               Una cadena de redirección a la página del historial de recolecciones del usuario.
+     */
     @PostMapping("/solicitarRecoleccion")
     public String solicitarRecoleccion(
             @RequestParam("tipoResiduo") String tipoResiduo,
             @RequestParam("peso") float peso,
-            @RequestParam("fechaHora") String fechaHora,
+            @RequestParam("fechaProgramada") String fechaHora,
             HttpSession session) {
 
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-
-        Residuo residuo = new Residuo();
-        residuo.setId(UUIDGenerator.generar());
-        residuo.setTipo(TipoResiduo.valueOf(tipoResiduo));
-        residuo.setPeso(peso);
-        residuo.setFechaRegistro(LocalDateTime.now());
-        new ResiduoDAO().registrar(residuo);
-
-        Recoleccion recoleccion = new Recoleccion();
-        recoleccion.setId(UUIDGenerator.generar());
-        recoleccion.setUsuario(usuario);
-        recoleccion.setResiduo(residuo);
-        recoleccion.setFechaProgramada(LocalDateTime.parse(fechaHora));
-        recoleccion.setTurno("Mañana");
-        recoleccion.setFrecuencia(Frecuencia.BAJO_DEMANDA);
-        recoleccion.setEstado(EstadoRecoleccion.PROGRAMADA);
-        recoleccion.setPuntos(residuo.calcularPuntos());
-        new RecoleccionDAO().registrar(recoleccion);
-
-        Notificacion notificacion = new Notificacion();
-        notificacion.setId(UUIDGenerator.generar());
-        notificacion.setUsuario(usuario);
-        notificacion.setMensaje("Tu solicitud de recolección fue registrada correctamente.");
-        notificacion.setFechaEnvio(LocalDateTime.now());
-        notificacion.setTipo(TipoNotificacion.CONFIRMACION);
-        notificacion.setEstado(EstadoSesion.ACTIVA);
-        new NotificacionDAO().registrar(notificacion);
+        usuario.solicitarRecoleccion(tipoResiduo, peso, fechaHora, session);
 
         return "redirect:/usuario/historial";
     }
 
-    // POST: cancelar una recolección
+    
+    /**
+     * Maneja la cancelación de una solicitud de recolección.
+     *
+     * Este método está mapeado a la solicitud POST para el endpoint "/cancelarRecoleccion".
+     * Recibe el ID de la recolección a cancelar como un parámetro de la solicitud,
+     * invoca el método correspondiente del DAO para cancelar la recolección y luego
+     * redirige al usuario a la página de "historial".
+     *
+     * @param id El ID de la recolección a cancelar, proporcionado como un parámetro de la solicitud.
+     * @return Una cadena de redirección a la página de "historial".
+     */
     @PostMapping("/cancelarRecoleccion")
     public String cancelarRecoleccion(@RequestParam("idRecoleccion") String id) {
         new RecoleccionDAO().cancelarRecoleccion(id);
         return "redirect:/usuario/historial";
     }
 
-    // POST: editar fecha de recolección
+    
+    /**
+     * Maneja la solicitud POST para editar la fecha de recolección de una recolección específica.
+     *
+     * @param id El ID de la recolección que se desea actualizar.
+     * @param nuevaFecha La nueva fecha para la recolección en formato ISO-8601 (por ejemplo, "yyyy-MM-ddTHH:mm:ss").
+     * @return Una cadena de redirección a la página del historial de recolecciones del usuario.
+     */
     @PostMapping("/editarRecoleccion")
     public String editarRecoleccion(@RequestParam("idRecoleccion") String id,
             @RequestParam("nuevaFecha") String nuevaFecha) {

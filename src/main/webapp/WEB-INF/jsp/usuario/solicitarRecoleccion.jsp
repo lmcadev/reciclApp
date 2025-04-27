@@ -32,6 +32,11 @@
                         <input type="datetime-local" id="fechaProgramada" name="fechaProgramada" class="form-control" required />
                     </div>
 
+                    <div class="mb-3">
+                        <label for="peso" class="form-label">Peso Estimado (Kg)</label>
+                        <input type="number" step="0.01" id="peso" name="peso" class="form-control" placeholder="Ingrese el peso en kilogramos" required />
+                    </div>
+
                     <!-- Turno -->
                     <div class="mb-3">
                         <label for="turno" class="form-label">Turno</label>

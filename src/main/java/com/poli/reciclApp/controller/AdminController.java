@@ -8,6 +8,8 @@ import com.poli.reciclApp.model.Localidad;
 import com.poli.reciclApp.model.Recoleccion;
 import com.poli.reciclApp.model.Usuario;
 import com.poli.reciclApp.model.enums.Rol;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +21,12 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
+    @Autowired
+    private LocalidadDAO localidadDAO;
+
     @GetMapping("/dashboard")
     public String dashboard() {
-        return "admin/dashboard"; 
+        return "admin/dashboard";
     }
 
     @GetMapping("/asignar")
@@ -39,14 +44,14 @@ public class AdminController {
 
     @GetMapping("/roles")
     public String roles(Model model) {
-       try {
-        Administrador administrador = new Administrador(null, null, null, null, null, null, null, 0);
-        return administrador.asignarRol(model);
-       } catch (Exception e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-        return "error"; // Return a default view or error page
-       }
+        try {
+            Administrador administrador = new Administrador(null, null, null, null, null, null, null, 0);
+            return administrador.asignarRol(model);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "error"; // Return a default view or error page
+        }
     }
 
     @GetMapping("/reporte")
@@ -61,18 +66,27 @@ public class AdminController {
         }
     }
 
+
+
+    @GetMapping("/localidades")
+    public String listarLocalidades(Model model) {
+        List<Localidad> localidades = localidadDAO.listarTodas();
+        model.addAttribute("localidades", localidades);
+        return "admin/localidades";
+    }
+
     @PostMapping("/asignarRecoleccion")
     public String asignarRecoleccion(@RequestParam("idRecoleccion") String recoId,
             @RequestParam("empresaId") String empresaId) {
         new RecoleccionDAO().asignarEmpresa(recoId, empresaId);
-        return "redirect:/admin/asignar"; 
+        return "redirect:/admin/asignar";
     }
 
     @PostMapping("/asignarRol")
     public String asignarRol(@RequestParam("usuarioId") String usuarioId,
             @RequestParam("rol") Rol nuevoRol) {
         new UsuarioDAO().actualizarRol(usuarioId, nuevoRol);
-        return "redirect:/admin/roles"; 
+        return "redirect:/admin/roles";
     }
 
     // Agregar Usuario

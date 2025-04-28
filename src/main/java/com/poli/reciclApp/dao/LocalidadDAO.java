@@ -8,6 +8,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 public class LocalidadDAO {
 
 
@@ -74,6 +77,8 @@ public class LocalidadDAO {
         }
         return localidades;
     }
+
+
 
    
     public boolean actualizar(Localidad localidad) {

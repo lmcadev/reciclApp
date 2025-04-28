@@ -29,11 +29,16 @@
                     Asignar Recolecciones
                 </a>
                 <a href="${pageContext.request.contextPath}/admin/roles" class="list-group-item list-group-item-action">
-                    Gestionar Roles de Usuarios
+                    Gestion de Usuarios
                 </a>
                 <a href="${pageContext.request.contextPath}/admin/reporte" class="list-group-item list-group-item-action">
                     Generar Reportes de Recolección
                 </a>
+
+                <a href="${pageContext.request.contextPath}/admin/localidades" class="list-group-item list-group-item-action">
+                        Gestionar Localidades
+                </a>
+                
             </div>
         </div>
     </div>

@@ -16,6 +16,41 @@
 <head>
     <title>Gestión de Usuarios</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #e9f0f2;
+        }
+
+        .custom-header {
+            background-color: #6c8c94;
+            color: white;
+        }
+
+        .custom-button {
+            background-color: #6c8c94;
+            color: white;
+            border: none;
+        }
+
+        .custom-button:hover {
+            background-color: #5d7b82;
+        }
+
+        .custom-table thead {
+            background-color: #6c8c94;
+            color: white;
+        }
+
+        .form-select:focus,
+        .form-control:focus {
+            border-color: #6c8c94;
+            box-shadow: 0 0 0 0.2rem rgba(108, 140, 148, 0.25);
+        }
+
+        .btn-close {
+            background-color: white;
+        }
+    </style>
 </head>
 <body class="bg-light">
 
@@ -24,10 +59,9 @@
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="text-center flex-grow-1">Gestión de Usuarios</h3>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarUsuario">Agregar Usuario</button>
+        <button class="btn custom-button" data-bs-toggle="modal" data-bs-target="#modalAgregarUsuario">Agregar Usuario</button>
     </div>
 
-    <!-- Mensajes -->
     <% if (mensajeExito != null) { %>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <%= mensajeExito %>
@@ -41,9 +75,8 @@
         </div>
     <% } %>
 
-    <!-- Tabla de Usuarios -->
-    <table class="table table-striped table-hover bg-white shadow-sm">
-        <thead class="table-primary">
+    <table class="table table-striped table-hover bg-white shadow-sm custom-table">
+        <thead>
             <tr>
                 <th>Nombre</th>
                 <th>Correo</th>
@@ -58,11 +91,11 @@
                 <td><%= u.getCorreo() %></td>
                 <td><%= u.getRol() %></td>
                 <td class="d-flex gap-2">
-                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario<%= u.getId() %>">Editar</button>
+                    <button class="btn btn-sm custom-button" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario<%= u.getId() %>">Editar</button>
 
                     <form action="${pageContext.request.contextPath}/admin/eliminarUsuario" method="post" onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?');">
                         <input type="hidden" name="usuarioId" value="<%= u.getId() %>"/>
-                        <button class="btn btn-sm btn-danger">Eliminar</button>
+                        <button class="btn btn-sm custom-button">Eliminar</button>
                     </form>
                 </td>
             </tr>
@@ -72,7 +105,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="${pageContext.request.contextPath}/admin/editarUsuario" method="post">
-                            <div class="modal-header">
+                            <div class="modal-header custom-header">
                                 <h5 class="modal-title">Editar Usuario</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
@@ -106,8 +139,6 @@
                                             <option>No hay localidades disponibles</option>
                                         <% } %>
                                     </select>
-                                    
-                                    
                                 </div>
                                 <div class="mb-3">
                                     <label>Rol</label>
@@ -119,7 +150,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                                <button type="submit" class="btn custom-button">Guardar Cambios</button>
                             </div>
                         </form>
                     </div>
@@ -135,7 +166,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <form action="${pageContext.request.contextPath}/admin/agregarUsuario" method="post">
-                <div class="modal-header">
+                <div class="modal-header custom-header">
                     <h5 class="modal-title">Agregar Nuevo Usuario</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -171,8 +202,6 @@
                                 <option>No hay localidades disponibles</option>
                             <% } %>
                         </select>
-                        
-                        
                     </div>
                     <div class="mb-3">
                         <label>Rol</label>
@@ -184,7 +213,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Agregar Usuario</button>
+                    <button type="submit" class="btn custom-button">Agregar Usuario</button>
                 </div>
             </form>
         </div>
@@ -192,7 +221,6 @@
 </div>
 
 <jsp:include page="../footer.jsp" />
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

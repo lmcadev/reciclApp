@@ -74,7 +74,6 @@
                 <!-- Cuadro de imagen a la izquierda -->
                 <div class="col-md-6">
                     <div class="preview-box">
-                        Imagen de referencia
                         <!-- Puedes poner <img src="..." class="img-fluid" /> aquí -->
                     </div>
                 </div>

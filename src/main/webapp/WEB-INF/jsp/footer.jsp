@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<footer class="bg-success text-white mt-5">
+<footer style="background-color: #a2c0c6; color: white;" class="mt-5">
     <div class="container py-4">
         <div class="row">
             <div class="col-md-4 mb-3">
@@ -11,17 +11,17 @@
                 <ul class="list-unstyled small">
                     <li>GRUPO B01</li>
                     <li>GRUPOS 1</li>
-                    <li><p>
-                        Daniel Quitian Álzate</br>
-                        Sebastián Gamez Hincapié</br>
-                        Diego Castaño Ramírez</br>
-                        Jorge Borbón Romero</br>
-                        Luis Miguel Castañeda Arciniegas
+                    <li>
+                        <p>
+                            Daniel Quitian Álzate<br>
+                            Sebastián Gamez Hincapié<br>
+                            Diego Castaño Ramírez<br>
+                            Jorge Borbón Romero<br>
+                            Luis Miguel Castañeda Arciniegas
                         </p>
-                        </li>
+                    </li>
                 </ul>
             </div>
-            
         </div>
         <div class="text-center small mt-4">
             &copy; 2025 Gestión de Residuos. Todos los derechos reservados.

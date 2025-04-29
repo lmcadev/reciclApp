@@ -7,7 +7,7 @@
     String rol = (usuario != null) ? usuario.getRol().name() : "";
 %>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #a2c0c6;">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Gestión de Residuos</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
@@ -16,7 +16,6 @@
 
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
                 <% if ("USUARIO".equals(rol)) { %>
                     <li class="nav-item">
                         <a class="nav-link" href="${pageContext.request.contextPath}/usuario/historial">Historial</a>

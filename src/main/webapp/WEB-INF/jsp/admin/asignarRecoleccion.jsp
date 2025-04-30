@@ -63,7 +63,7 @@
                     <td><%= r.getResiduo().getPeso() %> kg</td>
                     <td><%= r.getFechaProgramada() %></td>
                     <td>
-                        <form action="admin" method="post" class="d-flex">
+                        <form action="${pageContext.request.contextPath}/admin/asignarRecoleccion" method="post" class="d-flex">
                             <input type="hidden" name="action" value="asignarRecoleccion"/>
                             <input type="hidden" name="idRecoleccion" value="<%= r.getId() %>"/>
                             <select name="empresaId" class="form-select me-2 custom-select" required>
